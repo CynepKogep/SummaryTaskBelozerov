@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//WebContent/WEB-INF/jsp/error_page.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/settings.jsp=UTF-8
+encoding//WebContent/WEB-INF/jspf/header.jspf=UTF-8
+encoding//WebContent/WEB-INF/jspf/headerforregistration.jspf=UTF-8
+encoding//WebContent/login.jsp=UTF-8
+encoding//src/ua/kharkov/khpi/belozerov/web/command/PaysClientCommand.java=UTF-8

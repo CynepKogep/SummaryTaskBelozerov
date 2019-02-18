@@ -1,0 +1,137 @@
+<%--=========================================================================== 
+Header (top area). 
+(Заголовок (верхняя область).)
+===========================================================================--%> 
+
+
+<%@ page import="ua.kharkov.khpi.belozerov.db.Role" %>
+<%@ include file="/WEB-INF/jspf/directive/page.jspf" %>
+<%@ include file="/WEB-INF/jspf/directive/taglib.jspf" %>
+
+<tr>
+<td id="header">
+
+<c:if test="${not empty user}">
+<%--=========================================================================== 
+This is the user menu. 
+===========================================================================--%> 
+
+<div id="leftHeader">
+
+	<c:choose>
+
+<%--=========================================================================== 
+This way we define the ADMIN MENU. 
+===========================================================================--%> 
+		<c:when test="${userRole.name == 'admin' }">
+			<a href="controller?command=listOrdersA">
+				<fmt:message key="resource_jsp.users"/>
+			</a> &nbsp;
+			<a href="controller?command=cardsAdminCommand">
+				<fmt:message key="resource_jsp.cards"/> 
+			</a> &nbsp;
+			<a href="controller?command=AdminCreateCard">
+				<fmt:message key="resource_jsp.create_card"/> 
+			</a> &nbsp;
+		</c:when>
+
+		
+<%--=========================================================================== 
+This way we define the USER MENU.
+===========================================================================--%> 
+		<c:when test="${userRole.name == 'client'}">
+<%-- 			<a href="controller?command=listMenu">
+			    menu
+				<fmt:message key="header_jspf.anchor.menu"/>
+			</a> &nbsp; --%>
+			
+			<a href="controller?command=listClientCards">
+				<fmt:message key="resource_jsp.cards"/> 
+			</a> &nbsp;
+
+ 			<a href="controller?command=listClientPays">
+                <fmt:message key="resource_jsp.pays"/>
+			</a> &nbsp;
+			<a href="controller?command=ClientCreatePay">
+                <fmt:message key="resource_jsp.create_pay"/>
+                <%-- <fmt:message key="resource_jsp.pays"/> --%>
+			</a> &nbsp;
+			
+	
+<%--          	<c:if test = "${localization_value == 'ru'}">
+			    <a href="controller?command=listClientPays">
+                    Платежи 			
+			    </a> &nbsp;
+			</c:if>
+			<c:if test = "${localization_value == 'en'}">
+			    <a href="controller?command=listClientPays">
+                    Pays 			
+			    </a> &nbsp;
+			</c:if>
+ --%>			
+			
+			
+		</c:when>
+	</c:choose>
+	
+<%--=========================================================================== 
+This way we define the settings anchor.
+===========================================================================--%> 
+	<a href="controller?command=viewSettings">
+		<fmt:message key="resource_jsp.settings"/>
+	</a> &nbsp;
+
+</div>
+
+<%--=========================================================================== 
+This way we define the menu located at the right of header. 
+===========================================================================--%> 
+<div id="rightHeader" >
+
+<%--=========================================================================== 
+Type user name if the user object is presented in the current session.  
+===========================================================================--%> 
+<%--     <c:when test="${userRole.name == 'client'}">
+	    <c:if test = "${localization_value == 'ru'}">
+	        <c:out value="${cardsList.firstName} ${cardsList.lastName}"/>
+	    </c:if>
+	    <c:if test = "${localization_value == 'en'}">
+	        <c:out value="${cardsList.firstNameRu} ${cardsList.lastNameRu}"/>
+	    </c:if>
+    </c:when>
+ --%>
+	<c:if test = "${localization_value == 'en'}">
+	    <c:out value="${user.firstName} ${user.lastName}"/>
+	</c:if>
+	<c:if test = "${localization_value == 'ru'}">
+	    <c:out value="${user.firstNameRu} ${user.lastNameRu}"/>
+	</c:if>
+	
+<%--=========================================================================== 
+Type user role name if the user object is presented in the current session.  
+===========================================================================--%> 
+	<c:if test="${not empty userRole}">
+		<c:out value="(${userRole.name})"/>
+	</c:if>
+
+<%--=========================================================================== 
+Type link to logout  
+===========================================================================--%> 
+	<a href="controller?command=logout">
+		<fmt:message key="resource_jsp.logout"/>
+	</a> 	
+
+</div>
+</c:if>
+
+<c:if test="${empty user and title ne 'Login'}">
+	<div id="rightHeader">
+		<a href="login.jsp">
+			<fmt:message key="resource_jsp.login"/>
+		</a>
+	</div>
+</c:if>
+
+	</td>
+</tr>
+
