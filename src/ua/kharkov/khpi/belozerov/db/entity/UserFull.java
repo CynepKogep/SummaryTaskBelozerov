@@ -4,7 +4,7 @@ public class UserFull extends Entity {
 
 	private static final long serialVersionUID = -6889036256149495888L;
 
-	// private int    id; // есть в Entity
+	// private int    id; // пїЅпїЅпїЅпїЅ пїЅ Entity
 	private String login;
 	private String password;
 	private String firstName;
@@ -15,6 +15,8 @@ public class UserFull extends Entity {
 	private int    accessesUsersId;
 	private String roles;	
 	private String accessesUsers;
+	private int countBlockCard; 
+	
 	
 	public String getLogin() {
 		return login;
@@ -104,6 +106,14 @@ public class UserFull extends Entity {
 
 	public void setAccessesUsers(String accessesUsers) {
 		this.accessesUsers = accessesUsers;
+	}
+
+	public int getCountBlockCard() {
+		return countBlockCard;
+	}
+
+	public void setCountBlockCard(int countBlockCard) {
+		this.countBlockCard = countBlockCard;
 	}
 
 }

@@ -43,9 +43,12 @@ public class RegistrationCommand extends Command{
 		log.debug("last_name_ru_registration:" + last_name_ru_registration);
 		log.debug("name_button:" + name_button);
 		
-		// пользователи, для исключения повторяющихся  
+		// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  
 		List<UserFull> usersList = new UserFullInfoDao().getUsers();
 		log.debug("Set the request attribute: usersList --> " + usersList);
+		int size_UserFull = usersList.size();
+		log.debug("Set the request attribute: size_UserFull --> " + size_UserFull);
+		
 		
 		String is_user = null;
 		if (login_registration != null && login_registration != null && password_registration != null && 

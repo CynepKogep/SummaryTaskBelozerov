@@ -183,7 +183,7 @@ public class UserFullInfoDao {
                 user.setLastNameRu(rs.getString(Fields.USER__LAST_NAME_RU));
                 user.setRoleId(rs.getInt(Fields.USER__ROLE_ID));
                 user.setAccessesUsersId(rs.getInt(Fields.ACCESSES_USERS_ID));
-                // Возможна ошибка из-за Fields.ROLES_NAME = Fields.ACCESSES_USERS_NAME
+                // Fields.ROLES_NAME = Fields.ACCESSES_USERS_NAME
                 user.setRoles(rs.getString(Fields.ROLES_NAME));
                 user.setAccessesUsers(rs.getString(Fields.ACCESSES_USERS_NAME));
                 
@@ -217,6 +217,36 @@ public class UserFullInfoDao {
         }
         return UserFullList;
     }
+    
+    public int getBlockCard(int id_user) 
+    {
+    	String a = "" + id_user;
+    	String requst = 
+        		"SELECT count(credit_account.accesses_accounts_id)" + 
+        		"FROM users, credit_account " +
+        		"WHERE users.id = " +  a  + " AND users.id = credit_account.user_id AND credit_account.accesses_accounts_id = 1;";
+        String count = "";		
+    	
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(requst);
+            rs.next();
+            count += rs.getString(1);
+           System.out.printf("count = " + count);
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollbackAndClose(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return  Integer.parseInt(count);
+    }
+
+    
     
     
     

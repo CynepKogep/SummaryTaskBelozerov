@@ -27,7 +27,8 @@
  						        <td><fmt:message key="resource_jsp.second_name"/></td>
  						        <td><fmt:message key="resource_jsp.first_name"/></td>
  						        <td><fmt:message key="resource_jsp.access"/></td>
- 						        <td></td> 
+ 						        <td></td>
+ 						        <td> countBlockCard </td> 
 					        </tr>
 				        </thead>
                         <c:forEach var="bean" items="${usersList}">
@@ -79,7 +80,10 @@
 				                            </div>      
 				                        </c:if>
 				                    </form>
-		                        </td>  
+		                        </td> 
+		                        <td>
+		                           ${bean.countBlockCard}
+		                        </td> 
  		                    </tr>
                         </c:forEach>			
 			        </table>

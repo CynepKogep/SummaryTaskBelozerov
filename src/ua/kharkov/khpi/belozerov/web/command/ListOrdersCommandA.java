@@ -2,6 +2,7 @@ package ua.kharkov.khpi.belozerov.web.command;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -37,9 +38,9 @@ public class ListOrdersCommandA extends Command {
 	 * container tries to serialize the session it may fail because the session
 	 * can contain TreeMap object with not serializable comparator.
 	 * 
-	 * (Сериализуемый компаратор, используемый с контейнером TreeMap. 
-	 * Когда контейнер сервлета пытается сериализовать сеанс, он может выйти из строя, 
-	 * потому что сеанс может содержать объект TreeMap с не сериализуемым компаратором.)
+	 * (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TreeMap. 
+	 * пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, 
+	 * пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ TreeMap пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.)
 	 * 
 	 * @author D.Kolesnikov
 	 * 
@@ -93,6 +94,26 @@ public class ListOrdersCommandA extends Command {
 		List<UserFull> usersList = new UserFullInfoDao().getUsers();
 		// log.trace("Found in DB: usersAList --> " + usersAList);
 		log.trace("Found in DB: usersAList --> " + usersList);
+		
+		int size_UserFull = usersList.size();
+		log.debug("Set the request attribute: size_UserFull --> " + size_UserFull);
+		
+		List<Integer> countBlockCard = new ArrayList<Integer>();
+		for (int i = 0; i < size_UserFull;  i++)
+		{
+			countBlockCard.add(new UserFullInfoDao().getBlockCard(i));
+		}
+		for (int i = 0; i < size_UserFull;  i++)
+		{
+			log.debug("countBlockCard ["+ i + "]: " + countBlockCard.get(i));
+			UserFull oneUserFull = usersList.get(i);
+			oneUserFull.setCountBlockCard(countBlockCard.get(i));
+			usersList.set(i, oneUserFull);
+		}
+		
+		
+		
+		
 		
 		// Collections.sort(userOrderBeanList, compareById);
 		
