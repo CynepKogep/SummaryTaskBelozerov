@@ -101,7 +101,7 @@ public class ListOrdersCommandA extends Command {
 		List<Integer> countBlockCard = new ArrayList<Integer>();
 		for (int i = 0; i < size_UserFull;  i++)
 		{
-			countBlockCard.add(new UserFullInfoDao().getBlockCard(i));
+			countBlockCard.add(new UserFullInfoDao().getBlockCard(i+1));
 		}
 		for (int i = 0; i < size_UserFull;  i++)
 		{
