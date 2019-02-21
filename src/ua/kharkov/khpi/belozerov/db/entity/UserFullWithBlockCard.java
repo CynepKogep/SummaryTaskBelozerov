@@ -1,6 +1,6 @@
 package ua.kharkov.khpi.belozerov.db.entity;
 
-public class UserFull extends Entity {
+public class UserFullWithBlockCard extends Entity {
 
 	private static final long serialVersionUID = -6889036256149495888L;
 
@@ -15,7 +15,7 @@ public class UserFull extends Entity {
 	private int    accessesUsersId;
 	private String roles;	
 	private String accessesUsers;
-	private int countBlockCard; 
+	private int    countBlockCard; 
 	
 	
 	public String getLogin() {

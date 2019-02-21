@@ -23,7 +23,8 @@ public final class Fields {
 	
 	public static final String ROLES_NAME = "name_roles";                  //10
 	public static final String ACCESSES_USERS_NAME = "name_accesses_users";//11
-	
+	public static final String ACCESSES_BLOCK_COUNT = "blockCount";        //12
+
 	
 	public static final String CARDS__NUMBERS = "numbers";
 	public static final String CARDS__NAME = "name";                               // pays 8  

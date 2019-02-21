@@ -13,6 +13,7 @@ import java.util.List;
 
 import ua.kharkov.khpi.belozerov.db.entity.User;
 import ua.kharkov.khpi.belozerov.db.entity.UserFull;
+import ua.kharkov.khpi.belozerov.db.entity.UserFullWithBlockCard;
 
 
 /**
@@ -26,6 +27,14 @@ public class UserFullInfoDao {
           + " users.accesses_users_id, roles.name_roles, accesses_users.name_accesses_users "             		
           + "FROM users, roles, accesses_users " 
           + "WHERE users.role_id = roles.id AND users.accesses_users_id = accesses_users.id;";
+    
+    private static final String SQL__FIND_USER_ALL_BLOCK_COUNT =
+    "SELECT users.id, users.login, users.password, users.first_name, " +  
+    " users.last_name, users.first_name_ru, users.last_name_ru, users.role_id, " +
+    " users.accesses_users_id, roles.name_roles, accesses_users.name_accesses_users, " + 
+    "( SELECT COUNT(1) FROM credit_account CA WHERE users.id = CA.user_id AND accesses_accounts_id = 1 ) blockCount " +  
+    "FROM users, roles, accesses_users " + 
+    " WHERE users.role_id = roles.id AND users.accesses_users_id = accesses_users.id; " ;
  
     private static final String SQL_UPDATE_USER_ACCESSES_USERS =
             "UPDATE users SET accesses_users_id=? "+
@@ -41,6 +50,14 @@ public class UserFullInfoDao {
     "SELECT users.id, users.login, users.password, users.first_name, " 
   + "users.last_name, users.first_name_ru, users.last_name_ru, users.role_id,"
   + " users.accesses_users_id, roles.name_roles, accesses_users.name_accesses_users "             		
+  + "FROM users, roles, accesses_users " 
+  + "WHERE login=? AND users.role_id = roles.id AND users.accesses_users_id = accesses_users.id;";
+	private static final String SQL__FIND_USER_BY_LOGIN__BLOCK_COUNT =
+            // "SELECT * FROM users WHERE login=?";
+    "SELECT users.id, users.login, users.password, users.first_name, " 
+  + "users.last_name, users.first_name_ru, users.last_name_ru, users.role_id,"
+  + " users.accesses_users_id, roles.name_roles, accesses_users.name_accesses_users " 
+  + "( SELECT COUNT(1) FROM credit_account CA WHERE users.id = CA.user_id AND accesses_accounts_id = 1 ) blockCount "
   + "FROM users, roles, accesses_users " 
   + "WHERE login=? AND users.role_id = roles.id AND users.accesses_users_id = accesses_users.id;";
 	
@@ -103,6 +120,7 @@ public class UserFullInfoDao {
             con = DBManager.getInstance().getConnection();
             UserMapper mapper = new UserMapper();
             pstmt = con.prepareStatement(SQL__FIND_USER_BY_LOGIN);
+            //pstmt = con.prepareStatement(SQL__FIND_USER_BY_LOGIN__BLOCK_COUNT);
             pstmt.setString(1, login);
             rs = pstmt.executeQuery();
             if (rs.next())
@@ -186,7 +204,7 @@ public class UserFullInfoDao {
                 // Fields.ROLES_NAME = Fields.ACCESSES_USERS_NAME
                 user.setRoles(rs.getString(Fields.ROLES_NAME));
                 user.setAccessesUsers(rs.getString(Fields.ACCESSES_USERS_NAME));
-                
+                // user.setCountBlockCard(rs.getInt(11));
                 return user;
             } 
             catch (SQLException e) 
@@ -194,6 +212,74 @@ public class UserFullInfoDao {
                 throw new IllegalStateException(e);
             }
         }
+    }
+    
+    private static class UserMapperWithBlockCard implements EntityMapper<UserFullWithBlockCard> 
+    {
+        @Override
+        public UserFullWithBlockCard mapRow(ResultSet rs) 
+        {
+            try 
+            {
+            	UserFullWithBlockCard user = new UserFullWithBlockCard();
+                
+            	user.setId(rs.getLong(Fields.ENTITY__ID));
+                user.setLogin(rs.getString(Fields.USER__LOGIN));
+                user.setPassword(rs.getString(Fields.USER__PASSWORD));
+                user.setFirstName(rs.getString(Fields.USER__FIRST_NAME));
+                user.setLastName(rs.getString(Fields.USER__LAST_NAME));
+                user.setFirstNameRu(rs.getString(Fields.USER__FIRST_NAME_RU));
+                user.setLastNameRu(rs.getString(Fields.USER__LAST_NAME_RU));
+                user.setRoleId(rs.getInt(Fields.USER__ROLE_ID));
+                user.setAccessesUsersId(rs.getInt(Fields.ACCESSES_USERS_ID));
+                // Fields.ROLES_NAME = Fields.ACCESSES_USERS_NAME
+                user.setRoles(rs.getString(Fields.ROLES_NAME));
+                user.setAccessesUsers(rs.getString(Fields.ACCESSES_USERS_NAME));
+                user.setCountBlockCard(rs.getInt(Fields.ACCESSES_BLOCK_COUNT));
+                return user;
+            } 
+            catch (SQLException e) 
+            {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+    
+    
+    public List<UserFullWithBlockCard> getUsersWithBlockCard() 
+    {
+        List<UserFullWithBlockCard> UserFullList = new ArrayList<UserFullWithBlockCard>();
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = DBManager.getInstance().getConnection();
+            UserMapperWithBlockCard mapper = new UserMapperWithBlockCard();
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(SQL__FIND_USER_ALL_BLOCK_COUNT);
+            // rs = stmt.executeQuery(SQL__FIND_USER_ALL_BLOCK_COUNT);
+            while (rs.next())
+//            	  System.out.println(rs.getString(1));
+//                  System.out.println(rs.getString(2));
+//                  System.out.println(rs.getString(3));
+//                  System.out.println(rs.getString(4));
+//                  System.out.println(rs.getString(5));
+//                  System.out.println(rs.getString(6));
+//                  System.out.println(rs.getString(7));
+//                  System.out.println(rs.getString(8));
+//                  System.out.println(rs.getString(9));
+//                  System.out.println(rs.getString(10));
+//                  System.out.println(rs.getString(11));
+            
+            	 UserFullList.add(mapper.mapRow(rs));
+            
+        } catch (SQLException ex) {
+            DBManager.getInstance().rollbackAndClose(con);
+            ex.printStackTrace();
+        } finally {
+            DBManager.getInstance().commitAndClose(con);
+        }
+        return UserFullList;
     }
     
     public List<UserFull> getUsers() 
@@ -207,8 +293,22 @@ public class UserFullInfoDao {
             UserMapper mapper = new UserMapper();
             stmt = con.createStatement();
             rs = stmt.executeQuery(SQL__FIND_USER_ALL);
+            // rs = stmt.executeQuery(SQL__FIND_USER_ALL_BLOCK_COUNT);
             while (rs.next())
+//            	  System.out.println(rs.getString(1));
+//                  System.out.println(rs.getString(2));
+//                  System.out.println(rs.getString(3));
+//                  System.out.println(rs.getString(4));
+//                  System.out.println(rs.getString(5));
+//                  System.out.println(rs.getString(6));
+//                  System.out.println(rs.getString(7));
+//                  System.out.println(rs.getString(8));
+//                  System.out.println(rs.getString(9));
+//                  System.out.println(rs.getString(10));
+//                  System.out.println(rs.getString(11));
+            
             	 UserFullList.add(mapper.mapRow(rs));
+            
         } catch (SQLException ex) {
             DBManager.getInstance().rollbackAndClose(con);
             ex.printStackTrace();
@@ -216,7 +316,13 @@ public class UserFullInfoDao {
             DBManager.getInstance().commitAndClose(con);
         }
         return UserFullList;
-    }
+    }   
+    
+    
+    
+    
+    
+    
     
     public int getBlockCard(int id_user) 
     {

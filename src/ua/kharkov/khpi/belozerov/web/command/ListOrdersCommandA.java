@@ -20,6 +20,7 @@ import ua.kharkov.khpi.belozerov.db.UserFullInfoDao;
 import ua.kharkov.khpi.belozerov.db.bean.UserOrderBean;
 import ua.kharkov.khpi.belozerov.db.entity.UserA;
 import ua.kharkov.khpi.belozerov.db.entity.UserFull;
+import ua.kharkov.khpi.belozerov.db.entity.UserFullWithBlockCard;
 
 /**
  * Lists orders.
@@ -89,7 +90,7 @@ public class ListOrdersCommandA extends Command {
 		}
 		
 		
-		
+/*		
 		// List<UserA> usersAList = new UserDaoA().findUserAll();
 		List<UserFull> usersList = new UserFullInfoDao().getUsers();
 		// log.trace("Found in DB: usersAList --> " + usersAList);
@@ -111,16 +112,17 @@ public class ListOrdersCommandA extends Command {
 			usersList.set(i, oneUserFull);
 		}
 		
-		
-		
-		
-		
 		// Collections.sort(userOrderBeanList, compareById);
 		
 		// put user order beans list to request
 		// request.setAttribute("usersAList", usersAList);		
 		request.setAttribute("usersList", usersList);
 		log.trace("Set the request attribute: usersList --> " + usersList);
+*/		
+		List<UserFullWithBlockCard> usersWithBlockCardList = new UserFullInfoDao().getUsersWithBlockCard();
+		request.setAttribute("usersList", usersWithBlockCardList);
+		log.trace("Set the request attribute: usersList --> " + usersWithBlockCardList);
+		
 		
 		log.debug("Commands finished");
 		
